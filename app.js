@@ -6,6 +6,12 @@ const $ = (s, el = document) => el.querySelector(s);
 const $$ = (s, el = document) => [...el.querySelectorAll(s)];
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
+/* ============ SUBMIT FORM LINK ============
+   Every "Submit a move" button opens this URL in a new tab.
+   PLACEHOLDER: intentionally broken until the Google Form exists.
+   Replace it with the form's share link (e.g. https://forms.gle/...). */
+const SUBMIT_FORM_URL = 'https://forms.gle/REPLACE-WITH-GOOGLE-FORM';
+
 /* ============ FILTER OPTIONS ============
    Edit these to change the filter chips and the form's dropdowns. */
 const CATEGORIES = ['Flips', 'Twists', 'Kicks', 'Breaking', 'Parkour', 'Other'];
@@ -109,7 +115,7 @@ function initDatabase() {
         <img src="assets/trickopedia.png" alt="" class="empty-logo">
         <h2>No entries yet</h2>
         <p>The database is just getting started. Be the first to add a move.</p>
-        <button type="button" class="btn btn-red" data-open-submit>+ Submit a move</button>
+        <a href="${SUBMIT_FORM_URL}" class="btn btn-red" target="_blank" rel="noopener">+ Submit a move</a>
       </div>`;
     } else {
       grid.innerHTML = `<div class="empty empty-sm">
@@ -139,7 +145,7 @@ function initDatabase() {
 
   // Press "/" to jump to search
   document.addEventListener('keydown', (ev) => {
-    if (ev.key !== '/' || /INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName) || $('#submitDialog').open) return;
+    if (ev.key !== '/' || /INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) return;
     ev.preventDefault();
     search.focus();
   });
@@ -147,85 +153,18 @@ function initDatabase() {
   render();
 }
 
-/* ============ SUBMIT FORM ============
-   Sends entries to /api/submit (server.js saves them to data/submissions.json). */
-function initSubmit() {
-  const dialog = $('#submitDialog');
-  const form = $('#submitForm');
-  const error = $('#formError');
-  const send = $('#sendBtn');
-
-  $('#formCategory').innerHTML = `<option value="">Choose…</option>` + CATEGORIES.map((c) => `<option>${esc(c)}</option>`).join('');
-  $('#formLevel').innerHTML = `<option value="">Not sure</option>` + LEVELS.map((l) => `<option>${esc(l)}</option>`).join('');
-
-  const showDone = (done) => {
-    $('#formFields').hidden = done;
-    $('#formDone').hidden = !done;
-    send.hidden = done;
-    $('#againBtn').hidden = !done;
-    $('#cancelBtn').textContent = done ? 'Close' : 'Cancel';
-  };
-
-  const open = () => {
-    if (dialog.open) return;
-    showDone(false);
-    error.textContent = '';
-    dialog.showModal();
-    form.link.focus();
-  };
-
-  // Buttons are added and replaced as the grid re-renders, so delegate
-  document.addEventListener('click', (ev) => {
-    if (ev.target.closest('[data-open-submit]')) open();
+/* ============ SUBMIT LINKS ============ */
+function initSubmitLinks() {
+  $$('[data-submit-link]').forEach((a) => {
+    a.href = SUBMIT_FORM_URL;
+    a.target = '_blank';
+    a.rel = 'noopener';
   });
-  $$('[data-close]', dialog).forEach((b) => b.addEventListener('click', () => dialog.close()));
-  // Click on the backdrop closes the dialog
-  dialog.addEventListener('click', (ev) => { if (ev.target === dialog) dialog.close(); });
-  $('#againBtn').addEventListener('click', () => { form.reset(); showDone(false); form.link.focus(); });
-
-  form.addEventListener('submit', async (ev) => {
-    ev.preventDefault();
-    error.textContent = '';
-    const data = Object.fromEntries(new FormData(form));
-    data.link = data.link.trim();
-    if (data.link && !/^https?:\/\//i.test(data.link)) data.link = 'https://' + data.link;
-    form.link.value = data.link;
-
-    const invalid = [...form.elements].find((el) => el.willValidate && !el.checkValidity());
-    if (invalid) {
-      error.textContent = invalid.name === 'link' ? 'Please enter a valid link.' : 'Please fill in the required fields.';
-      invalid.focus();
-      return;
-    }
-
-    send.disabled = true;
-    send.textContent = 'Sending…';
-    try {
-      const res = await fetch('/api/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      });
-      const out = await res.json().catch(() => ({}));
-      if (!res.ok || !out.ok) throw new Error(out.error || 'Something went wrong.');
-      form.reset();
-      showDone(true);
-    } catch (err) {
-      error.textContent = err instanceof TypeError ? "Couldn't reach the server. Please try again." : err.message;
-    } finally {
-      send.disabled = false;
-      send.textContent = 'Send for review';
-    }
-  });
-
-  if (location.hash === '#submit') open();
 }
 
 /* ============ INIT ============ */
 $('#year').textContent = new Date().getFullYear();
 initTicker();
-// The database and form only exist on the home page
-if ($('#grid')) {
-  initDatabase();
-  initSubmit();
-}
+initSubmitLinks();
+// The database only exists on the home page
+if ($('#grid')) initDatabase();

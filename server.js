@@ -4,7 +4,6 @@ const path = require('path');
 
 const PORT = process.env.PORT || 8000;
 const ROOT = __dirname;
-const SUBMISSIONS = path.join(ROOT, 'data', 'submissions.json');
 
 const MIME = {
   '.html': 'text/html; charset=utf-8',
@@ -20,49 +19,6 @@ const MIME = {
   '.mp4': 'video/mp4',
   '.webm': 'video/webm',
 };
-
-// Form submissions from the site are appended to data/submissions.json
-const FIELDS = { link: 500, name: 120, category: 40, level: 40, credit: 120, notes: 1000 };
-
-function reply(res, status, data) {
-  res.writeHead(status, { 'Content-Type': 'application/json' });
-  res.end(JSON.stringify(data));
-}
-
-function handleSubmit(req, res) {
-  let body = '';
-  req.on('data', (chunk) => {
-    body += chunk;
-    if (body.length > 1e6) req.destroy();
-  });
-  req.on('end', () => {
-    let input;
-    try {
-      input = JSON.parse(body);
-    } catch {
-      return reply(res, 400, { ok: false, error: 'Invalid request.' });
-    }
-    // Spam trap filled in: pretend it worked and drop it
-    if (input.website) return reply(res, 200, { ok: true });
-
-    // Keep only the form's fields, trimmed and length-capped
-    const entry = {};
-    for (const [key, max] of Object.entries(FIELDS)) {
-      entry[key] = String(input[key] ?? '').trim().slice(0, max);
-    }
-    if (!/^https?:\/\/\S+\.\S+/i.test(entry.link)) return reply(res, 400, { ok: false, error: 'Please enter a valid link.' });
-    if (!entry.name || !entry.category) return reply(res, 400, { ok: false, error: 'Please fill in the required fields.' });
-
-    fs.mkdirSync(path.dirname(SUBMISSIONS), { recursive: true });
-    let all = [];
-    try {
-      all = JSON.parse(fs.readFileSync(SUBMISSIONS, 'utf8'));
-    } catch {}
-    all.push({ ...entry, receivedAt: new Date().toISOString() });
-    fs.writeFileSync(SUBMISSIONS, JSON.stringify(all, null, 2));
-    reply(res, 200, { ok: true });
-  });
-}
 
 function serveStatic(req, res) {
   const urlPath = decodeURIComponent(req.url.split('?')[0]);
@@ -107,7 +63,6 @@ function serveStatic(req, res) {
 }
 
 http.createServer((req, res) => {
-  if (req.method === 'POST' && req.url === '/api/submit') return handleSubmit(req, res);
   if (req.method === 'GET') return serveStatic(req, res);
   res.writeHead(405);
   res.end('Method not allowed');

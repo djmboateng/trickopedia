@@ -27,9 +27,9 @@
       <nav class="top-nav" aria-label="Main">
         <a href="./" aria-current="page">Database</a>
         <a href="about.html">About</a>
-        <button type="button" class="btn btn-red" data-open-submit>
+        <a href="#" class="btn btn-red" data-submit-link>
           <span aria-hidden="true">+</span> <span class="btn-long">Submit a move</span><span class="btn-short">Submit</span>
-        </button>
+        </a>
       </nav>
     </div>
   </header>
@@ -55,71 +55,8 @@
 
   <footer class="foot">
     <p>© <span id="year"></span> Trickopedia</p>
-    <nav class="foot-links"><a href="about.html">About</a><button type="button" class="link" data-open-submit>Submit a move</button></nav>
+    <nav class="foot-links"><a href="about.html">About</a><a href="#" data-submit-link>Submit a move</a></nav>
   </footer>
-
-  <!-- ============ SUBMIT FORM ============ -->
-  <dialog class="modal" id="submitDialog" aria-labelledby="submitTitle">
-    <form id="submitForm" novalidate>
-      <div class="modal-head">
-        <h2 id="submitTitle">Submit a move</h2>
-        <button type="button" class="modal-close" data-close aria-label="Close">×</button>
-      </div>
-
-      <div class="modal-body" id="formFields">
-        <p class="muted">Share a link to a clip. Every entry is reviewed before it goes live.</p>
-
-        <label class="field">
-          <span>Link to the clip <b>*</b></span>
-          <input type="url" name="link" required placeholder="https://youtube.com/watch?v=…" maxlength="500">
-          <small class="hint">YouTube, Instagram, TikTok or any public link.</small>
-        </label>
-
-        <label class="field">
-          <span>Move name <b>*</b></span>
-          <input type="text" name="name" required placeholder="e.g. Butterfly twist" maxlength="120">
-        </label>
-
-        <div class="field-row">
-          <label class="field">
-            <span>Category <b>*</b></span>
-            <select name="category" required id="formCategory"></select>
-          </label>
-          <label class="field">
-            <span>Level</span>
-            <select name="level" id="formLevel"></select>
-          </label>
-        </div>
-
-        <label class="field">
-          <span>Who's in the clip / creator</span>
-          <input type="text" name="credit" placeholder="@handle" maxlength="120">
-        </label>
-
-        <label class="field">
-          <span>Notes</span>
-          <textarea name="notes" rows="3" placeholder="Anything we should know?" maxlength="1000"></textarea>
-        </label>
-
-        <!-- Spam trap: hidden from people, bots tend to fill it -->
-        <input type="text" name="website" class="trap" tabindex="-1" autocomplete="off" aria-hidden="true">
-
-        <p class="form-error" id="formError" role="alert"></p>
-      </div>
-
-      <div class="modal-done" id="formDone" hidden>
-        <img src="assets/trickopedia.png" alt="" class="done-logo">
-        <h3>Thanks, it's in!</h3>
-        <p class="muted">We'll review your move before it goes live.</p>
-      </div>
-
-      <div class="modal-foot">
-        <button type="button" class="btn btn-ghost" data-close id="cancelBtn">Cancel</button>
-        <button type="submit" class="btn btn-red" id="sendBtn">Send for review</button>
-        <button type="button" class="btn btn-ghost" id="againBtn" hidden>Submit another</button>
-      </div>
-    </form>
-  </dialog>
 
   <script src="app.js"></script>
 </body>
