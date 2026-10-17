@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About | Trickopedia</title>
+  <meta name="description" content="About Trickopedia, the ultimate body movement and moves database, and the person leading it.">
+  <meta name="theme-color" content="#0b0d0f">
+  <link rel="icon" href="assets/trickopedia.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <header class="top">
+    <div class="ticker" id="ticker"></div>
+    <div class="top-inner">
+      <a href="./" class="brand" aria-label="Trickopedia home">
+        <img src="assets/trickopedia.png" alt="" class="brand-logo">
+        <span class="brand-text">
+          <span class="brand-name">Trickopedia</span>
+          <span class="brand-tag">The ultimate body movement database</span>
+        </span>
+      </a>
+      <nav class="top-nav" aria-label="Main">
+        <a href="./">Database</a>
+        <a href="about.html" aria-current="page">About</a>
+        <a href="./#submit" class="btn btn-red">
+          <span aria-hidden="true">+</span> <span class="btn-long">Submit a move</span><span class="btn-short">Submit</span>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap about">
+    <section class="about-intro">
+      <h1>About Trickopedia</h1>
+      <p class="lead">Trickopedia is the ultimate body movement database: one place to find, learn and share moves, from your first cartwheel to a cheat 720.</p>
+      <p>Tricking, breaking, parkour and freerunning clips are scattered across a dozen apps. Trickopedia collects them in one simple, searchable library, sorted by category and level, so you can go straight to the move you want to learn.</p>
+    </section>
+
+    <section class="about-steps" aria-label="How it works">
+      <div class="step"><span>01</span><h2>Search</h2><p>Look up a move by name, then filter by category and level.</p></div>
+      <div class="step"><span>02</span><h2>Submit</h2><p>Know a great clip? Send us the link through the entry form.</p></div>
+      <div class="step"><span>03</span><h2>Reviewed</h2><p>Every entry is checked before it goes live in the database.</p></div>
+    </section>
+
+    <section class="leader">
+      <div class="leader-logo">
+        <img src="assets/davidb-logo.png" alt="David B. logo">
+      </div>
+      <div class="leader-text">
+        <p class="eyebrow">The leader behind the project</p>
+        <h2>David Boateng</h2>
+        <p>Trickopedia is led by David Boateng, a Computer Engineering student at George Mason University and a frontend web developer. He has been building websites since middle school and likes mission-driven projects that people can actually use.</p>
+        <a href="https://djmboateng.github.io/simulations/about.html" class="btn btn-white" target="_blank" rel="noopener">Learn more about David ↗</a>
+      </div>
+    </section>
+
+    <section class="about-cta">
+      <h2>Help build the database</h2>
+      <p>There are no entries yet. Yours could be the first.</p>
+      <a href="./#submit" class="btn btn-red">+ Submit a move</a>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <p>© <span id="year"></span> Trickopedia</p>
+    <nav class="foot-links"><a href="./">Database</a><a href="./#submit">Submit a move</a></nav>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

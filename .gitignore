@@ -1,0 +1,9 @@
+# Form entries people send in (private, review locally)
+data/
+
+# Old site versions kept as local backups
+_archive-*/
+
+node_modules/
+.DS_Store
+Thumbs.db
