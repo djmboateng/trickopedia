@@ -14,7 +14,7 @@ const SUBMIT_FORM_URL = 'https://forms.gle/REPLACE-WITH-GOOGLE-FORM';
 
 /* ============ FILTER OPTIONS ============
    Edit these to change the filter chips and the form's dropdowns. */
-const CATEGORIES = ['Flips', 'Twists', 'Kicks', 'Breaking', 'Parkour', 'Other'];
+const CATEGORIES = ['Flips', 'Twists', 'Kicks', 'Breaking', 'Parkour', 'Bodyweight', 'Other'];
 const LEVELS = ['Beginner', 'Intermediate', 'Advanced'];
 
 /* ============ ENTRIES ============
@@ -112,7 +112,7 @@ function initDatabase() {
       grid.innerHTML = list.map((e) => card(e, terms)).join('');
     } else if (!ENTRIES.length) {
       grid.innerHTML = `<div class="empty">
-        <img src="assets/trickopedia.png" alt="" class="empty-logo">
+        <img src="assets/logo-mark.png" alt="" class="empty-logo">
         <h2>No entries yet</h2>
         <p>The database is just getting started. Be the first to add a move.</p>
         <a href="${SUBMIT_FORM_URL}" class="btn btn-red" target="_blank" rel="noopener">+ Submit a move</a>
